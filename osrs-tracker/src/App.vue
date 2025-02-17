@@ -1,7 +1,5 @@
 <script setup>
-  import HelloWorld from './components/HelloWorld.vue'
   import OsrsPlanner from './components/osrsPlanner.vue';
-  import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>

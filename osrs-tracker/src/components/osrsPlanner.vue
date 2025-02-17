@@ -2,17 +2,12 @@
   import { ref } from 'vue';
   import { nextTick } from 'vue';
 
-  const renderComponent = ref(true);
   let user = ref('');
   let playerData = ref(null);
-
-  const forceRerender = async () => {
-    renderComponent.value = false; M
-    await nextTick();
-    renderComponent.value = true;
-  };
+  let loading = ref(false);
 
   function getPlayerData(user) {
+    loading.value = true;
     const apiUrl = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player=" + user;
     fetch(apiUrl)
       .then(response => {
@@ -27,6 +22,9 @@
       })
       .catch(error => {
         console.error('Error:', error);
+      })
+      .finally(() => {
+        loading.value = false;
       });
   }
 </script>
@@ -40,7 +38,10 @@
       <button @click="getPlayerData(user)">Hit the highscores</button>
     </h3>
   </div>
-  <div v-if="playerData">
+  <div v-if="loading">
+    <p>Loading...</p>
+  </div>
+  <div v-if="playerData && !loading">
     <h2>Player Data</h2>
     <table>
       <thead>
