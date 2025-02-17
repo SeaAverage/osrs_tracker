@@ -14,10 +14,9 @@
       .then(response => {
         if (!response.ok) {
           if (response.status === 404) {
-            errorMessage.value = 'Player not found';
             throw new Error('Player not found');
           }
-          throw new Error('Network response was not ok');
+          throw new Error('An unknown error occurred');
         }
         return response.json();
       })
@@ -27,6 +26,7 @@
       })
       .catch(error => {
         console.error('Error:', error);
+        errorMessage.value = error.message;
       })
       .finally(() => {
         loading.value = false;
