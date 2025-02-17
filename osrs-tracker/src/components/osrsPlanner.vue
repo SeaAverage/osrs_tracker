@@ -1,10 +1,11 @@
 <script setup>
   import { ref } from 'vue';
-  import { nextTick } from 'vue';
 
   let user = ref('');
   let playerData = ref(null);
   let loading = ref(false);
+  let errorMessage = ref('');
+
 
   function getPlayerData(user) {
     loading.value = true;
@@ -12,6 +13,10 @@
     fetch(apiUrl)
       .then(response => {
         if (!response.ok) {
+          if (response.status === 404) {
+            errorMessage.value = 'Player not found';
+            throw new Error('Player not found');
+          }
           throw new Error('Network response was not ok');
         }
         return response.json();
@@ -40,6 +45,9 @@
   </div>
   <div v-if="loading">
     <p>Loading...</p>
+  </div>
+  <div v-if="errorMessage">
+    <p style="color: red;">{{ errorMessage }}</p>
   </div>
   <div v-if="playerData && !loading">
     <h2>Player Data</h2>
